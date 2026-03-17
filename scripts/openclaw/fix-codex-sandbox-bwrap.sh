@@ -100,6 +100,7 @@ if (execSkipGitRepoCheckSupported) execArgs.push("--skip-git-repo-check");
 backend.args = execArgs;
 
 const resumeArgs = ["exec", "resume", "{sessionId}"];
+resumeArgs.push("--dangerously-bypass-approvals-and-sandbox");
 if (resumeSkipGitRepoCheckSupported) resumeArgs.push("--skip-git-repo-check");
 backend.resumeArgs = resumeArgs;
 
@@ -111,5 +112,5 @@ NODE
 mv "$TMP_FILE" "$CONFIG_PATH"
 
 echo "Patched codex-cli backend args in $CONFIG_PATH"
-echo "Detected flags: exec(color=$EXEC_COLOR_SUPPORTED sandbox=$EXEC_SANDBOX_SUPPORTED ask=$EXEC_ASK_ARG_SUPPORTED skip=$EXEC_SKIP_GIT_REPO_CHECK_SUPPORTED) resume(color=$RESUME_COLOR_SUPPORTED sandbox=$RESUME_SANDBOX_SUPPORTED ask=$RESUME_ASK_ARG_SUPPORTED skip=$RESUME_SKIP_GIT_REPO_CHECK_SUPPORTED)"
+echo "Detected flags: exec(color=$EXEC_COLOR_SUPPORTED sandbox=$EXEC_SANDBOX_SUPPORTED ask=$EXEC_ASK_ARG_SUPPORTED skip=$EXEC_SKIP_GIT_REPO_CHECK_SUPPORTED) resume(color=$RESUME_COLOR_SUPPORTED sandbox=$RESUME_SANDBOX_SUPPORTED ask=$RESUME_ASK_ARG_SUPPORTED skip=$RESUME_SKIP_GIT_REPO_CHECK_SUPPORTED bypass=forced)"
 echo "Backup: $BACKUP_DIR/openclaw.json.$TIMESTAMP.bak"
