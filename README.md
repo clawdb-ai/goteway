@@ -1,38 +1,127 @@
 # goteway
 
-OpenClaw Gateway 的高性能 Go 替代实现工作区（兼容优先，性能增强）。
+[![OpenClaw Skill](https://img.shields.io/badge/OpenClaw-Skill-2f855a)](https://openclaw.ai)
+[![Gateway](https://img.shields.io/badge/OpenClaw-Go%20Gateway-111827)](https://github.com/mac/goteway)
+[![Local Swap](https://img.shields.io/badge/Mode-Machine%20Local-0ea5e9)](https://github.com/mac/goteway)
 
-## 当前内容
+> **Where Go meets Gateway, and `gote` sounds like `goat`.**
 
-- 完整替代蓝图: `docs/blueprint/openclaw-go-gateway-replacement-blueprint.md`
-- 协议兼容契约: `docs/contracts/ws-protocol-compat.md`
-- HTTP 兼容契约: `docs/contracts/http-api-compat.md`
-- 插件兼容契约: `docs/contracts/plugin-compat-contract.md`
-- 压测规范: `docs/testing/perf-benchmark-spec.md`
-- 兼容测试矩阵: `docs/testing/compatibility-test-matrix.md`
-- 运维手册: `docs/ops/runbook.md`
-- SLO/告警: `docs/ops/slo-and-alerts.md`
-- 配置样例: `docs/config/openclaw.config.compat.sample.yaml`
+[中文](#goteway-中文) | [English](#goteway-english)
 
-## Go 工程骨架
+---
 
-- 启动入口: `cmd/goteway/main.go`
-- 运行时装配: `internal/runtime/app.go`
-- 协议协商: `internal/protocol/compat.go`
-- 认证骨架: `internal/auth/service.go`
-- 会话管理骨架: `internal/session/manager.go`
-- 插件注册与校验骨架: `internal/plugin/registry.go`, `internal/plugin/validator.go`
-- HTTP 兼容端点骨架: `internal/transport/httpapi/server.go`
-- WS 抽象契约: `internal/transport/ws/contract.go`
-- 幂等存储骨架: `internal/idempotency/store.go`
+## goteway (English)
 
-## 验证
+### Philosophy
+
+`goteway` is a compatibility-first Go replacement track for OpenClaw Gateway.
+The goal is simple: **keep protocol behavior stable**, improve operational control, and make debugging easier.
+
+### What goteway offers
+
+| Feature | Description |
+|---------|-------------|
+| **Protocol compatibility contracts** | WS/HTTP/plugin compatibility specs for replacement-safe behavior |
+| **Go gateway runtime scaffold** | Structured runtime layers for auth, sessions, protocol, and HTTP compatibility |
+| **Machine-local Go swap path** | Safe `systemd --user` replacement flow with backup and rollback |
+| **Debug-focused log tracking** | Live journald + proxy file logs to trace receive/dispatch/reply behavior |
+| **Rollback-first operations** | One-command restore to the original Node gateway service |
+
+### The Name
+
+**gote** + **gateway** = **goteway**  
+And yes, **`gote` sounds like `goat`**: stubbornly reliable on rough terrain.
+
+### Quick Start
+
+```bash
+# 1) Install as an OpenClaw skill from GitHub
+openclaw skills install https://github.com/mac/goteway.git
+
+# 2) Ask the skill to install the local Go gateway replacement
+openclaw skills run goteway-goat-gateway --task "replace my local openclaw gateway with goteway and keep debug logs"
+
+# 3) Verify status
+./scripts/openclaw/status-openclaw-gateway.sh
+
+# 4) Follow logs
+./scripts/openclaw/follow-openclaw-logs.sh
+```
+
+### Rollback
+
+```bash
+./scripts/openclaw/rollback-local-openclaw-gateway.sh
+```
+
+### Repository Map
+
+- Blueprint: `docs/blueprint/openclaw-go-gateway-replacement-blueprint.md`
+- Contracts: `docs/contracts/ws-protocol-compat.md`, `docs/contracts/http-api-compat.md`, `docs/contracts/plugin-compat-contract.md`
+- Ops: `docs/ops/runbook.md`, `docs/ops/slo-and-alerts.md`
+- Config sample: `docs/config/openclaw.config.compat.sample.yaml`
+- Skill entry: `SKILL.md`
+
+---
+
+## goteway 中文
+
+### 设计理念
+
+`goteway` 是 OpenClaw Gateway 的 Go 替代实现路线，核心原则是：
+**兼容优先，行为不漂移，排障更直接**。
+
+### goteway 提供什么
+
+| 能力 | 描述 |
+|------|------|
+| **协议兼容契约** | 提供 WS/HTTP/插件兼容规范，确保可替换性 |
+| **Go 运行时骨架** | 认证、会话、协议协商、HTTP 兼容层分层清晰 |
+| **本机替换流程** | `systemd --user` 下可回滚的机器本地替换 |
+| **日志追踪能力** | journald + 代理日志，便于定位接收/分发/回复链路 |
+| **回滚优先运维** | 单命令恢复原 Node 网关服务 |
+
+### 名字的由来
+
+**gote + gateway = goteway**。  
+`gote` 的发音接近 `goat`，意思也很直白：在复杂地形里也要稳。
+
+### 快速开始
+
+```bash
+# 1) 从 GitHub 安装技能
+openclaw skills install https://github.com/mac/goteway.git
+
+# 2) 让技能执行本机 Go 网关替换
+openclaw skills run goteway-goat-gateway --task "替换当前 openclaw gateway 为 goteway，并持续记录日志"
+
+# 3) 检查状态
+./scripts/openclaw/status-openclaw-gateway.sh
+
+# 4) 跟踪日志
+./scripts/openclaw/follow-openclaw-logs.sh
+```
+
+### 回滚
+
+```bash
+./scripts/openclaw/rollback-local-openclaw-gateway.sh
+```
+
+### 文档索引
+
+- 蓝图：`docs/blueprint/openclaw-go-gateway-replacement-blueprint.md`
+- 契约：`docs/contracts/ws-protocol-compat.md`、`docs/contracts/http-api-compat.md`、`docs/contracts/plugin-compat-contract.md`
+- 运维：`docs/ops/runbook.md`、`docs/ops/slo-and-alerts.md`
+- 配置样例：`docs/config/openclaw.config.compat.sample.yaml`
+- 技能入口：`SKILL.md`
+
+---
+
+## Verify
 
 ```bash
 go test ./...
 ```
 
-## 状态说明
-
-本仓库已完成“蓝图与契约层”全项落地，并给出可编译的执行骨架。  
-完整替代官方网关仍需继续实现 WS 真实传输、插件运行时桥接、全插件回归、性能调优与灰度发布流程。
+*Build the goat path. Keep the gateway calm.*

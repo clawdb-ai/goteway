@@ -1,0 +1,4 @@
+interface:
+  display_name: "Goteway Goat Gateway"
+  short_description: "Install, verify, debug, and rollback the local Go OpenClaw gateway"
+  default_prompt: "Replace this machine's OpenClaw gateway with goteway's Go implementation, verify message flow and health, keep logs for debugging, and provide rollback safety."
