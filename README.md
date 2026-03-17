@@ -29,7 +29,7 @@ The goal is simple: **keep protocol behavior stable**, improve operational contr
 
 ### The Name
 
-**gote** + **gateway** = **goteway**  
+**golang** + **gateway** = **goteway**  
 And yes, **`gote` sounds like `goat`**: stubbornly reliable on rough terrain.
 
 ### Quick Start
@@ -83,7 +83,7 @@ openclaw skills run goteway-goat-gateway --task "replace my local openclaw gatew
 
 ### 名字的由来
 
-**gote + gateway = goteway**。  
+**golang + gateway = goteway**。  
 `gote` 的发音接近 `goat`，意思也很直白：在复杂地形里也要稳。
 
 ### 快速开始
