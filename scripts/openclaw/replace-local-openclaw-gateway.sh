@@ -11,6 +11,7 @@ GO_BIN="${GO_BIN:-$HOME/.local/toolchains/go${GO_VERSION}/bin/go}"
 PROXY_BIN="${OPENCLAW_PROXY_BIN:-$HOME/.local/bin/openclaw-gateway-go-proxy}"
 PROXY_LOG_FILE="${OPENCLAW_PROXY_LOG_FILE:-$HOME/.local/state/openclaw/openclaw-gateway-go-proxy.log}"
 PROXY_LOG_HEADERS="${OPENCLAW_PROXY_LOG_HEADERS:-false}"
+FIX_CODEX_BWRAP="${OPENCLAW_FIX_CODEX_BWRAP:-true}"
 SERVICE_DIR="$HOME/.config/systemd/user"
 DROPIN_DIR="$SERVICE_DIR/${UNIT}.d"
 DROPIN_FILE="$DROPIN_DIR/10-go-replacement.conf"
@@ -122,6 +123,11 @@ Environment=OPENCLAW_UPSTREAM_URL=http://127.0.0.1:$UPSTREAM_PORT
 Environment=OPENCLAW_PROXY_LOG_FILE=$PROXY_LOG_FILE
 Environment=OPENCLAW_PROXY_LOG_HEADERS=$PROXY_LOG_HEADERS
 EOF
+
+if [[ "$FIX_CODEX_BWRAP" == "true" ]]; then
+  echo "[4.5/7] patch codex-cli sandbox mode to avoid bwrap loopback failures"
+  "$ROOT_DIR/scripts/openclaw/fix-codex-sandbox-bwrap.sh"
+fi
 
 echo "[5/7] reload and start services"
 systemctl --user daemon-reload
