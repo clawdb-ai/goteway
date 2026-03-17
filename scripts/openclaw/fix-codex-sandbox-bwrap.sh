@@ -17,20 +17,62 @@ TMP_FILE="$(mktemp)"
 trap 'rm -f "$TMP_FILE"' EXIT
 
 CODEX_BIN="${CODEX_BIN:-codex}"
-ASK_ARG_SUPPORTED="false"
+EXEC_COLOR_SUPPORTED="false"
+EXEC_SANDBOX_SUPPORTED="false"
+EXEC_ASK_ARG_SUPPORTED="false"
+EXEC_SKIP_GIT_REPO_CHECK_SUPPORTED="false"
+RESUME_COLOR_SUPPORTED="false"
+RESUME_SANDBOX_SUPPORTED="false"
+RESUME_ASK_ARG_SUPPORTED="false"
+RESUME_SKIP_GIT_REPO_CHECK_SUPPORTED="false"
 if command -v "$CODEX_BIN" >/dev/null 2>&1; then
-  if "$CODEX_BIN" exec --help 2>/dev/null | grep -q -- "--ask-for-approval"; then
-    ASK_ARG_SUPPORTED="true"
-  fi
+  EXEC_HELP="$("$CODEX_BIN" exec --help 2>/dev/null || true)"
+  RESUME_HELP="$("$CODEX_BIN" exec resume --help 2>/dev/null || true)"
+  if printf '%s\n' "$EXEC_HELP" | grep -Eq -- '^[[:space:]]+(-[[:alnum:]],[[:space:]]+)?--color([[:space:]]|$)'; then EXEC_COLOR_SUPPORTED="true"; fi
+  if printf '%s\n' "$EXEC_HELP" | grep -Eq -- '^[[:space:]]+(-[[:alnum:]],[[:space:]]+)?--sandbox([[:space:]]|$)'; then EXEC_SANDBOX_SUPPORTED="true"; fi
+  if printf '%s\n' "$EXEC_HELP" | grep -Eq -- '^[[:space:]]+(-[[:alnum:]],[[:space:]]+)?--ask-for-approval([[:space:]]|$)'; then EXEC_ASK_ARG_SUPPORTED="true"; fi
+  if printf '%s\n' "$EXEC_HELP" | grep -Eq -- '^[[:space:]]+(-[[:alnum:]],[[:space:]]+)?--skip-git-repo-check([[:space:]]|$)'; then EXEC_SKIP_GIT_REPO_CHECK_SUPPORTED="true"; fi
+  if printf '%s\n' "$RESUME_HELP" | grep -Eq -- '^[[:space:]]+(-[[:alnum:]],[[:space:]]+)?--color([[:space:]]|$)'; then RESUME_COLOR_SUPPORTED="true"; fi
+  if printf '%s\n' "$RESUME_HELP" | grep -Eq -- '^[[:space:]]+(-[[:alnum:]],[[:space:]]+)?--sandbox([[:space:]]|$)'; then RESUME_SANDBOX_SUPPORTED="true"; fi
+  if printf '%s\n' "$RESUME_HELP" | grep -Eq -- '^[[:space:]]+(-[[:alnum:]],[[:space:]]+)?--ask-for-approval([[:space:]]|$)'; then RESUME_ASK_ARG_SUPPORTED="true"; fi
+  if printf '%s\n' "$RESUME_HELP" | grep -Eq -- '^[[:space:]]+(-[[:alnum:]],[[:space:]]+)?--skip-git-repo-check([[:space:]]|$)'; then RESUME_SKIP_GIT_REPO_CHECK_SUPPORTED="true"; fi
 fi
 
-node - "$CONFIG_PATH" "$TMP_FILE" "$ASK_ARG_SUPPORTED" <<'NODE'
+node - "$CONFIG_PATH" "$TMP_FILE" \
+  "$EXEC_COLOR_SUPPORTED" \
+  "$EXEC_SANDBOX_SUPPORTED" \
+  "$EXEC_ASK_ARG_SUPPORTED" \
+  "$EXEC_SKIP_GIT_REPO_CHECK_SUPPORTED" \
+  "$RESUME_COLOR_SUPPORTED" \
+  "$RESUME_SANDBOX_SUPPORTED" \
+  "$RESUME_ASK_ARG_SUPPORTED" \
+  "$RESUME_SKIP_GIT_REPO_CHECK_SUPPORTED" <<'NODE'
 const fs = require("fs");
 
-const [, , configPath, outPath, askArgSupportedRaw] = process.argv;
+const [
+  ,
+  ,
+  configPath,
+  outPath,
+  execColorSupportedRaw,
+  execSandboxSupportedRaw,
+  execAskArgSupportedRaw,
+  execSkipGitRepoCheckSupportedRaw,
+  resumeColorSupportedRaw,
+  resumeSandboxSupportedRaw,
+  resumeAskArgSupportedRaw,
+  resumeSkipGitRepoCheckSupportedRaw,
+] = process.argv;
 const raw = fs.readFileSync(configPath, "utf8");
 const cfg = JSON.parse(raw);
-const askArgSupported = askArgSupportedRaw === "true";
+const execColorSupported = execColorSupportedRaw === "true";
+const execSandboxSupported = execSandboxSupportedRaw === "true";
+const execAskArgSupported = execAskArgSupportedRaw === "true";
+const execSkipGitRepoCheckSupported = execSkipGitRepoCheckSupportedRaw === "true";
+const resumeColorSupported = resumeColorSupportedRaw === "true";
+const resumeSandboxSupported = resumeSandboxSupportedRaw === "true";
+const resumeAskArgSupported = resumeAskArgSupportedRaw === "true";
+const resumeSkipGitRepoCheckSupported = resumeSkipGitRepoCheckSupportedRaw === "true";
 
 cfg.agents = cfg.agents && typeof cfg.agents === "object" ? cfg.agents : {};
 cfg.agents.defaults =
@@ -50,32 +92,16 @@ backend.command =
     : "codex";
 backend.env = backend.env && typeof backend.env === "object" ? backend.env : {};
 
-backend.args = [
-  "exec",
-  "--json",
-  "--color",
-  "never",
-  "--sandbox",
-  "danger-full-access",
-  "--skip-git-repo-check",
-];
-if (askArgSupported) {
-  backend.args.splice(6, 0, "--ask-for-approval", "never");
-}
+const execArgs = ["exec", "--json"];
+if (execColorSupported) execArgs.push("--color", "never");
+if (execSandboxSupported) execArgs.push("--sandbox", "danger-full-access");
+if (execAskArgSupported) execArgs.push("--ask-for-approval", "never");
+if (execSkipGitRepoCheckSupported) execArgs.push("--skip-git-repo-check");
+backend.args = execArgs;
 
-backend.resumeArgs = [
-  "exec",
-  "resume",
-  "{sessionId}",
-  "--color",
-  "never",
-  "--sandbox",
-  "danger-full-access",
-  "--skip-git-repo-check",
-];
-if (askArgSupported) {
-  backend.resumeArgs.splice(7, 0, "--ask-for-approval", "never");
-}
+const resumeArgs = ["exec", "resume", "{sessionId}"];
+if (resumeSkipGitRepoCheckSupported) resumeArgs.push("--skip-git-repo-check");
+backend.resumeArgs = resumeArgs;
 
 cfg.agents.defaults.cliBackends["codex-cli"] = backend;
 
@@ -84,9 +110,6 @@ NODE
 
 mv "$TMP_FILE" "$CONFIG_PATH"
 
-if [[ "$ASK_ARG_SUPPORTED" == "true" ]]; then
-  echo "Patched codex-cli backend sandbox mode in $CONFIG_PATH (with --ask-for-approval)"
-else
-  echo "Patched codex-cli backend sandbox mode in $CONFIG_PATH (without --ask-for-approval)"
-fi
+echo "Patched codex-cli backend args in $CONFIG_PATH"
+echo "Detected flags: exec(color=$EXEC_COLOR_SUPPORTED sandbox=$EXEC_SANDBOX_SUPPORTED ask=$EXEC_ASK_ARG_SUPPORTED skip=$EXEC_SKIP_GIT_REPO_CHECK_SUPPORTED) resume(color=$RESUME_COLOR_SUPPORTED sandbox=$RESUME_SANDBOX_SUPPORTED ask=$RESUME_ASK_ARG_SUPPORTED skip=$RESUME_SKIP_GIT_REPO_CHECK_SUPPORTED)"
 echo "Backup: $BACKUP_DIR/openclaw.json.$TIMESTAMP.bak"
