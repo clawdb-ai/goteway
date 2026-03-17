@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/mac/goteway/internal/config"
 	"github.com/mac/goteway/internal/observability"
@@ -35,8 +36,12 @@ func NewAppFromEnv() (*App, error) {
 		logic:  logic,
 		health: health,
 		http: &http.Server{
-			Addr:    addr,
-			Handler: httpSrv.Handler(),
+			Addr:              addr,
+			Handler:           httpSrv.Handler(),
+			ReadHeaderTimeout: 5 * time.Second,
+			ReadTimeout:       15 * time.Second,
+			WriteTimeout:      30 * time.Second,
+			IdleTimeout:       120 * time.Second,
 		},
 	}
 	return app, nil
@@ -50,7 +55,9 @@ func (a *App) Run(ctx context.Context) error {
 
 	select {
 	case <-ctx.Done():
-		_ = a.http.Shutdown(context.Background())
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), time.Duration(a.cfg.ShutdownSec)*time.Second)
+		defer cancel()
+		_ = a.http.Shutdown(shutdownCtx)
 		return nil
 	case err := <-errCh:
 		if err == http.ErrServerClosed {

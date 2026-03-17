@@ -46,11 +46,11 @@
 
 ### 1.4 Checklist
 
-- [x] 明确非目标（不改语义、不改插件规范）
-- [x] 定义替代成功标准
-- [x] 固化性能目标
-- [x] 固化稳定性目标
-- [x] 冻结协议版本协商策略
+- [ ] 明确非目标（不改语义、不改插件规范）
+- [ ] 定义替代成功标准
+- [ ] 固化性能目标
+- [ ] 固化稳定性目标
+- [ ] 冻结协议版本协商策略
 
 ---
 
@@ -106,14 +106,14 @@
 
 ### 2.5 Checklist
 
-- [x] 完整定义 WS 帧语义（req/res/event）
-- [x] 完整定义 connect 握手入参与协商
-- [x] 完整定义 connect 响应结构
-- [x] 完整定义 tick/presence/agent 事件结构
-- [x] 定义事件顺序与 stateVersion 语义
-- [x] 定义 HTTP 兼容端点契约
-- [x] 定义 OpenAI 兼容结构与流式语义
-- [x] 定义幂等机制与判重策略
+- [ ] 完整定义 WS 帧语义（req/res/event）
+- [ ] 完整定义 connect 握手入参与协商
+- [ ] 完整定义 connect 响应结构
+- [ ] 完整定义 tick/presence/agent 事件结构
+- [ ] 定义事件顺序与 stateVersion 语义
+- [ ] 定义 HTTP 兼容端点契约
+- [ ] 定义 OpenAI 兼容结构与流式语义
+- [ ] 定义幂等机制与判重策略
 
 ---
 
@@ -153,12 +153,12 @@
 
 ### 3.5 Checklist
 
-- [x] 完成四层架构定义
-- [x] 定义分片+事件循环并发模型
-- [x] 定义 clientId/sessionId/dmScope 路由索引
-- [x] 定义背压机制
-- [x] 定义统一 context 取消链
-- [x] 定义热重载控制面
+- [ ] 完成四层架构定义
+- [ ] 定义分片+事件循环并发模型
+- [ ] 定义 clientId/sessionId/dmScope 路由索引
+- [ ] 定义背压机制
+- [ ] 定义统一 context 取消链
+- [ ] 定义热重载控制面
 
 ---
 
@@ -206,15 +206,15 @@
 
 ### 4.6 Checklist
 
-- [x] 保持 manifest 规范兼容
-- [x] 保持插件发现机制兼容
-- [x] 覆盖全部插件类型兼容设计
-- [x] 定义 Go+适配层运行方案
-- [x] 定义 Provider 兼容契约
-- [x] 定义 Channel 兼容契约
-- [x] 定义 Tool 兼容契约
-- [x] 定义零代码验证模式
-- [x] 定义插件隔离策略
+- [ ] 保持 manifest 规范兼容
+- [ ] 保持插件发现机制兼容
+- [ ] 覆盖全部插件类型兼容设计
+- [ ] 定义 Go+适配层运行方案
+- [ ] 定义 Provider 兼容契约
+- [ ] 定义 Channel 兼容契约
+- [ ] 定义 Tool 兼容契约
+- [ ] 定义零代码验证模式
+- [ ] 定义插件隔离策略
 
 ---
 
@@ -241,13 +241,13 @@
 
 ### 5.4 Checklist
 
-- [x] 定义 Token 认证流程
-- [x] 定义 Password 认证流程
-- [x] 定义 Device Auth/Pairing 流程
-- [x] 定义 Allowlist/Group Policy 语义
-- [x] 保持默认本地绑定
-- [x] 定义远程访问认证策略
-- [x] 定义审计日志覆盖范围
+- [ ] 定义 Token 认证流程
+- [ ] 定义 Password 认证流程
+- [ ] 定义 Device Auth/Pairing 流程
+- [ ] 定义 Allowlist/Group Policy 语义
+- [ ] 保持默认本地绑定
+- [ ] 定义远程访问认证策略
+- [ ] 定义审计日志覆盖范围
 
 ---
 
@@ -268,12 +268,12 @@
 
 ### 6.3 Checklist
 
-- [x] 配置文件结构兼容策略
-- [x] 环境变量覆盖策略
-- [x] SecretRef 兼容策略
-- [x] 会话状态格式兼容
-- [x] 消息历史兼容
-- [x] Identity Links / dmScope 兼容
+- [ ] 配置文件结构兼容策略
+- [ ] 环境变量覆盖策略
+- [ ] SecretRef 兼容策略
+- [ ] 会话状态格式兼容
+- [ ] 消息历史兼容
+- [ ] Identity Links / dmScope 兼容
 
 ---
 
@@ -302,14 +302,14 @@
 
 ### 7.4 Checklist
 
-- [x] 定义标准压测场景
-- [x] 网络层优化策略
-- [x] 内存优化策略
-- [x] 序列化优化策略
-- [x] 锁优化策略
-- [x] GC 优化策略
-- [x] 插件调用链隔离性能策略
-- [x] 可观测性体系定义
+- [ ] 定义标准压测场景
+- [ ] 网络层优化策略
+- [ ] 内存优化策略
+- [ ] 序列化优化策略
+- [ ] 锁优化策略
+- [ ] GC 优化策略
+- [ ] 插件调用链隔离性能策略
+- [ ] 可观测性体系定义
 
 ---
 
@@ -336,16 +336,16 @@
 
 ### 8.3 Checklist
 
-- [x] 定义握手兼容测试
-- [x] 定义认证流程测试
-- [x] 定义消息路由测试
-- [x] 定义插件加载测试
-- [x] 定义 HTTP 兼容测试
-- [x] 定义持久化与恢复测试
-- [x] 定义事件顺序测试
-- [x] 定义高并发稳定性测试
-- [x] 定义官方对照回归
-- [x] 定义全插件回归
+- [ ] 定义握手兼容测试
+- [ ] 定义认证流程测试
+- [ ] 定义消息路由测试
+- [ ] 定义插件加载测试
+- [ ] 定义 HTTP 兼容测试
+- [ ] 定义持久化与恢复测试
+- [ ] 定义事件顺序测试
+- [ ] 定义高并发稳定性测试
+- [ ] 定义官方对照回归
+- [ ] 定义全插件回归
 
 ---
 
@@ -370,11 +370,11 @@
 
 ### 9.4 Checklist
 
-- [x] 定义灰度双栈方案
-- [x] 定义 Shadow 对比方案
-- [x] 定义一键回滚开关
-- [x] 定义分阶段切流规则
-- [x] 定义发布门禁
+- [ ] 定义灰度双栈方案
+- [ ] 定义 Shadow 对比方案
+- [ ] 定义一键回滚开关
+- [ ] 定义分阶段切流规则
+- [ ] 定义发布门禁
 
 ---
 
@@ -390,11 +390,11 @@
 
 ### 10.2 Checklist
 
-- [x] 协议兼容说明书（见 `docs/contracts/ws-protocol-compat.md`）
-- [x] 插件兼容指南（见 `docs/contracts/plugin-compat-contract.md`）
-- [x] 性能报告模板（见 `docs/testing/perf-benchmark-spec.md`）
-- [x] 运维手册（见 `docs/ops/runbook.md`）
-- [x] SLO/告警规则（见 `docs/ops/slo-and-alerts.md`）
+- [ ] 协议兼容说明书（见 `docs/contracts/ws-protocol-compat.md`）
+- [ ] 插件兼容指南（见 `docs/contracts/plugin-compat-contract.md`）
+- [ ] 性能报告模板（见 `docs/testing/perf-benchmark-spec.md`）
+- [ ] 运维手册（见 `docs/ops/runbook.md`）
+- [ ] SLO/告警规则（见 `docs/ops/slo-and-alerts.md`）
 
 ---
 

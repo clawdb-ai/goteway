@@ -26,6 +26,10 @@ func NewService(cfg config.Config) *Service {
 
 // Connect implements protocol handshake semantics.
 func (s *Service) Connect(reqID string, p types.ConnectParams) types.Frame {
+	if err := protocol.ValidateConnectParams(p); err != nil {
+		return protocol.NewErrorResponse(reqID, "ERR_INVALID_REQUEST", err.Error())
+	}
+
 	if err := s.auth.Validate(p.Auth); err != nil {
 		return protocol.NewErrorResponse(reqID, "ERR_UNAUTHORIZED", "authentication failed")
 	}
@@ -36,8 +40,8 @@ func (s *Service) Connect(reqID string, p types.ConnectParams) types.Frame {
 	}
 
 	clientID := s.session.NewClientID()
-	s.session.Put(clientID, map[string]any{
-		"client": p.Client,
+	s.session.Put(clientID, session.ClientMeta{
+		Client: p.Client,
 	})
 	return protocol.NewConnectSuccess(reqID, v, clientID)
 }

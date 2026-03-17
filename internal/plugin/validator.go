@@ -1,6 +1,9 @@
 package plugin
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 var (
 	ErrMissingName  = errors.New("plugin name is required")
@@ -10,13 +13,13 @@ var (
 
 // ValidateManifest performs static validation without executing plugin code.
 func ValidateManifest(m Manifest) error {
-	if m.Name == "" {
+	if strings.TrimSpace(m.Name) == "" {
 		return ErrMissingName
 	}
-	if m.Type == "" {
+	if strings.TrimSpace(m.Type) == "" {
 		return ErrMissingType
 	}
-	if m.Entry == "" {
+	if strings.TrimSpace(m.Entry) == "" {
 		return ErrMissingEntry
 	}
 	return nil
