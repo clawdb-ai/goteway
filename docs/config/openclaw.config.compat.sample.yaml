@@ -1,0 +1,53 @@
+# OpenClaw Gateway config compatibility sample (Go implementation)
+
+server:
+  host: 127.0.0.1
+  ws_port: 18789
+  http_port: 18789
+  read_timeout_ms: 30000
+  write_timeout_ms: 30000
+
+auth:
+  token:
+    enabled: true
+    value: ${GATEWAY_TOKEN}
+  password:
+    enabled: false
+    hash: ${GATEWAY_PASSWORD_HASH}
+  device_auth:
+    enabled: true
+
+security:
+  allowlist:
+    enabled: true
+    items: []
+  trusted_proxy:
+    enabled: false
+    cidrs: []
+
+plugins:
+  directories:
+    - ./extensions
+  verify_only: false
+  hot_reload: true
+  max_concurrency_per_plugin: 64
+  timeout_ms: 30000
+
+sessions:
+  store: file
+  path: ./data/sessions
+  idempotency_ttl_sec: 86400
+
+observability:
+  metrics:
+    enabled: true
+    path: /metrics
+  pprof:
+    enabled: true
+    host: 127.0.0.1
+    port: 6060
+
+limits:
+  max_connections: 100000
+  per_connection_queue: 1024
+  max_request_body_bytes: 2097152
